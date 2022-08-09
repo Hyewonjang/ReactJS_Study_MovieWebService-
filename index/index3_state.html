@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <body>
+        <div id="root"></div>
+    </body>
+    <script src="https://unpkg.com/react@17/umd/react.production.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.js" crossorigin></script>
+    <!--Babel : code transformer / jsx로 적은 코드를 브라우저가 이해할 수 있는 형태로 변형해줌. (jsx -> React.createElement 형태로)-->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const root = document.getElementById("root");
+        function App(){
+
+            // const data = React.useState(0); //data, 즉 useState를 저장하는 변수객체는 배열이며 첫번째 값은 초깃값이고 두번쨰값은 이의 값을 바꾸는 함수이다.
+            // const counter = data[0]
+            // const modifier = data[1]
+            // 2개의 요소롤 가지는 배열 food가 있을 때,
+                // const [food1, food2] = food는
+                // food1 변수에 food 배열의 첫째 요소가, food2 변수에 food 배열의 둘째 요소가 들어가게 된다.
+            // const [counter, modifier] = React.useState(0);
+                //modifier 함수 원리
+                // const onClick = () => {
+                //     modifier(98098080); //counter = 98098080; ReactDOM.render(<App />, root); 변화된 곳에 대해서 자동으로 재렌더링 해줌.
+                // };
+                
+            const [counter, setCounter] = React.useState(0);
+
+            const onClick = () => {
+                // setCounter(counter + 1); // setCounter 함수가 호출되어 리렌더링할 때 변경된 새로운 counter 값을 바탕으로/가지고 App component 전체를 재생성한다. 하지 React.js는 똑똑하기 때문에 createElement함수 대신에 jsx로 작성된 div 태그 안의 태그를 html 화면에 띄울 때, span이나 div 자체를 바꾸는 것이 아니라, span 태그 안 counter 값만을 바꾼다. //질문) 맞나요?
+                    // counter state를 직접 이용하는 것은 위험하다. counter state는 다른 곳에서도 값을 재설정할 수 있기 때문에 component state의 값이 예상과 다를 수 있다.
+                //1. 정해진 숫자 넣기
+                // setCounter(500)
+                //2. current argument를 사용해서 현재 값 확정적으로 사용하기
+                setCounter((current) => current + 1);
+            };
+            //setCounter 함수가 호출되어 리렌더링할 때 변경된 새로운 counter 값을 바탕으로/가지고 App component 전체를 재생성한다. 따라서 아래 두줄의 코드는 바뀐 counter 값을 반영하여 매 재렌더링 때마다 실행된다.
+            console.log("rendered"); 
+            console.log(counter);
+            
+            return(
+            // <div>
+            //     <h3>Total Clicks : {data[0]}</h3>
+            //     <button>Click me</button>
+            // </div>
+
+            <div>
+                <h3>Total Clicks : {counter}</h3>
+                <button onClick={onClick}>Click me</button>
+            </div>
+        );
+        }
+        ReactDOM.render(<App />, root);
+
+    </script>
+
+</html>

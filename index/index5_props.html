@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <body>
+        <div id="root"></div>
+    </body>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <!--PropTypes 설정-->
+    <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
+    <!--Babel : code transformer / jsx로 적은 코드를 브라우저가 이해할 수 있는 형태로 변형해줌. (jsx -> React.createElement 형태로)-->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+     
+        // //props 인자 : props.text
+        // function Btn(props){ //props는 유일한 인자
+        //     return <button 
+        //      style={{
+        //         backgroundColor: "tomato",
+        //         color:"white",
+        //         padding: "10px 20px",
+        //         border : 0,
+        //         borderRadius: 10,
+        //     }}>{props.text}</button>
+        // }     
+        
+        //shortcut
+        // function Btn({text, big}){
+        function Btn({text, onClick, fontSize = 16}){ //props각 객체이기 때문에 {}중괄호를 사용해서 나타내도 됨. - 중괄호 사용 시, props.을 붙일 필요 없다.
+                              //function Btn(props.text) 대신에 props가 객체라는 점을 이용하여 function Btn({text})라고 나타낸 것. 
+                              //자바스크립트 특징 - default 값 설정 가능 : fontSize = 16
+            console.log(text, 'was rendered');
+            // console.log를 보면 알 수 있는데 Save Changes 버튼을 눌러 onClick 함수가 실행될 경우, value state값이 변하면서 재렌더링이 되는데 이 때 렌더링될 필요없는 text prop으로 Continue 문자열 값을 가지는 Btn component도 재렌더링된다.
+            // 위 문제를 해결하기 위해서 Memo를 쓴다. App component의 text 값으로 Continue를 가지는 Btn 태그 참조! - Memo 사용(const MemorizedBtn = React.memo(Btn))
+            return(
+                <button
+                    onClick={onClick} //부모 component인 App component의 상태를 변화시키는 함수는 부모 component에서 만들었지만 그 실행은 자식 Component인 Btn component에서 실행됨.
+                    style={{
+                        backgroundColor: "tomato",
+                        color:"white",
+                        padding: "10px 20px",
+                        border : 0,
+                        borderRadius: 10,
+                        fontSize, //fontSize: fontSize,와 같은 의미, 이름이 같기 떄문에
+                        // fontSize : big ? 18 : 16,
+                }}>
+                    {text}
+                </button>
+            )
+        } 
+        const MemorizedBtn = React.memo(Btn)  //MemorizedBtn은 memorized 버전의 Btn component
+        Btn.propTypes = {
+            text: PropTypes.string.isRequired, //.isRequired - 필수
+            fontSize: PropTypes.number, //.isRequired 없으면 optional - 선택적
+        }
+        function App(){
+            const [value, setValue] = React.useState("Save Changes");
+            const changeValue = () => setValue("Revert Changes"); // 부모 component인 App component의 상태를 변화시키는 함수 만듦.
+            return(
+                // <div>
+                //     <Btn text="Save Changes" big={true}/>
+                //     <Btn text="Continue" big={false}/>
+                // </div>
+                //Btn({text="Save Changes", big=true})
+                //Btn({text="Continue" big=false})
+
+                // Memo 사용 전
+                // Btn function component의 console.log를 보면 알 수 있는데 Save Changes 버튼을 눌러 onClick 함수가 실행될 경우, value state값이 변하면서 재렌더링이 되는데 이 때 렌더링될 필요없는 text prop으로 Continue 문자열 값을 가지는 Btn component도 재렌더링된다.
+                // 위 문제를 해결하기 위해서 Memo를 쓴다. App component의 text 값으로 Continue를 가지는 Btn 태그 참조! - Memo 사용(const MemorizedBtn = React.memo(Btn))
+                // <div>
+                //     <Btn text={value} onClick={changeValue} /> 
+                //     <Btn text="Continue" />
+                // </div>
+                
+                //Memo 사용 후
+                // <div>
+                //     <MemorizedBtn text={value} onClick={changeValue} fontSize={18}/> 
+                //     <MemorizedBtn text="Continue" />
+                // </div>
+
+                //propTypes 설정
+                <div>
+                    <Btn text="Save Changes" big={true}/>
+                    <Btn text="Continue" big={false}/>
+                    <Btn fontSize={18} text={"Save Changes"} /> 
+                </div>
+                
+                //<Btn text={18} fontSize={"Save Changes"} /> 
+                    //syntax 상 틀린 코드가 아니라서 실행됨.
+                    //하지만 개발자 입장에서 틀린 코드이므로 경고를 해줬으면 함.
+                    //하지만 ReactJS는 개발자가 각 prop별로 어떤 타입의 데이터를 원하는지 모름. => propTypes 사용
+                    //propTypes 설정 후에는 경고문 뜸! 에러가 아니라 실행은 됨.
+            );
+        }
+        const root = document.getElementById("root");
+        ReactDOM.render(<App />, root);
+
+    </script>
+
+</html>
