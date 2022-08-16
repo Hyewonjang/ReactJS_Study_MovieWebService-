@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/ReactJS_Study_MovieWebService-/static/css/main.d474251c.css",
+    "main.js": "/ReactJS_Study_MovieWebService-/static/js/main.131266d3.js",
+    "index.html": "/ReactJS_Study_MovieWebService-/index.html",
+    "main.d474251c.css.map": "/ReactJS_Study_MovieWebService-/static/css/main.d474251c.css.map",
+    "main.131266d3.js.map": "/ReactJS_Study_MovieWebService-/static/js/main.131266d3.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d474251c.css",
+    "static/js/main.131266d3.js"
+  ]
+}
